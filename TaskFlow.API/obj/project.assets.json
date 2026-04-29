@@ -36,6 +36,42 @@
             "related": ".pdb;.xml"
           }
         }
+      },
+      "TaskFlow.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "TaskFlow.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TaskFlow.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TaskFlow.Application.dll": {}
+        }
+      },
+      "TaskFlow.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/TaskFlow.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TaskFlow.Core.dll": {}
+        }
+      },
+      "TaskFlow.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "TaskFlow.Application": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TaskFlow.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TaskFlow.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -75,11 +111,28 @@
         "microsoft.openapi.2.0.0.nupkg.sha512",
         "microsoft.openapi.nuspec"
       ]
+    },
+    "TaskFlow.Application/1.0.0": {
+      "type": "project",
+      "path": "../TaskFlow.Application/TaskFlow.Application.csproj",
+      "msbuildProject": "../TaskFlow.Application/TaskFlow.Application.csproj"
+    },
+    "TaskFlow.Core/1.0.0": {
+      "type": "project",
+      "path": "../TaskFlow.Core/TaskFlow.Core.csproj",
+      "msbuildProject": "../TaskFlow.Core/TaskFlow.Core.csproj"
+    },
+    "TaskFlow.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../TaskFlow.Infrastructure/TaskFlow.Infrastructure.csproj",
+      "msbuildProject": "../TaskFlow.Infrastructure/TaskFlow.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net10.0": [
-      "Microsoft.AspNetCore.OpenApi >= 10.0.5"
+      "Microsoft.AspNetCore.OpenApi >= 10.0.5",
+      "TaskFlow.Application >= 1.0.0",
+      "TaskFlow.Infrastructure >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -106,7 +159,14 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Application\\TaskFlow.Application.csproj": {
+              "projectPath": "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Application\\TaskFlow.Application.csproj"
+            },
+            "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Infrastructure\\TaskFlow.Infrastructure.csproj": {
+              "projectPath": "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Infrastructure\\TaskFlow.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

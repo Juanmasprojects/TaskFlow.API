@@ -1,11 +1,48 @@
 {
   "version": 3,
   "targets": {
-    "net10.0": {}
+    "net10.0": {
+      "TaskFlow.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "dependencies": {
+          "TaskFlow.Core": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/TaskFlow.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TaskFlow.Application.dll": {}
+        }
+      },
+      "TaskFlow.Core/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v10.0",
+        "compile": {
+          "bin/placeholder/TaskFlow.Core.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/TaskFlow.Core.dll": {}
+        }
+      }
+    }
   },
-  "libraries": {},
+  "libraries": {
+    "TaskFlow.Application/1.0.0": {
+      "type": "project",
+      "path": "../TaskFlow.Application/TaskFlow.Application.csproj",
+      "msbuildProject": "../TaskFlow.Application/TaskFlow.Application.csproj"
+    },
+    "TaskFlow.Core/1.0.0": {
+      "type": "project",
+      "path": "../TaskFlow.Core/TaskFlow.Core.csproj",
+      "msbuildProject": "../TaskFlow.Core/TaskFlow.Core.csproj"
+    }
+  },
   "projectFileDependencyGroups": {
-    "net10.0": []
+    "net10.0": [
+      "TaskFlow.Application >= 1.0.0"
+    ]
   },
   "packageFolders": {
     "C:\\Users\\Juanma\\.nuget\\packages\\": {}
@@ -31,7 +68,11 @@
       "frameworks": {
         "net10.0": {
           "targetAlias": "net10.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Application\\TaskFlow.Application.csproj": {
+              "projectPath": "F:\\Documentos\\ProyectosPortfolio\\TaskFlow.api\\TaskFlow.Application\\TaskFlow.Application.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
