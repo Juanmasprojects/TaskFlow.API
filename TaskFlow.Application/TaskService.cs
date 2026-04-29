@@ -28,7 +28,7 @@ namespace TaskFlow.Application
             return task;
         }
 
-        public async Task<IEnumerable<TaskItem>> GetAllTasksAsync()
+        public async Task<List<TaskItem>> GetAllTasksAsync()
         {
             return await _taskRepository.GetAllAsync();
         }
