@@ -1,6 +1,6 @@
 // Configure controllers, EF Core with SQLite, and dependency injection for TaskFlow
 using Microsoft.EntityFrameworkCore;
-using TaskFlow.Infrastructure.Persistance;
+using TaskFlow.Infrastructure.Persistence;
 using TaskFlow.Application;
 
 var builder = WebApplication.CreateBuilder(args);

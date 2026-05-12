@@ -4,7 +4,7 @@
 using Microsoft.EntityFrameworkCore;
 using TaskFlow.Core;
 
-namespace TaskFlow.Infrastructure.Persistance
+namespace TaskFlow.Infrastructure.Persistence
 
 {
     public class TaskFlowDbContext : DbContext

@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using TaskFlow.Core;
 using TaskFlow.Application;
 
-namespace TaskFlow.Infrastructure.Persistance
+namespace TaskFlow.Infrastructure.Persistence
 
 {
     public class TaskRepository : ITaskRepository
