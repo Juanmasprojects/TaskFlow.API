@@ -4,6 +4,8 @@
 // Follows REST conventions and uses async methods.
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application;
+using TaskFlow.API.DTOs;
+
 
 [ApiController]
 [Route("api/[controller]")]
@@ -24,10 +26,10 @@ public class TasksController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreateTask(string title, string description)
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
     {
-        var task = await _taskService.CreateTaskAsync(title, description);
-        return CreatedAtAction(nameof(GetAllTasks), new { id = task.Id }, task);
+        var createdTask = await _taskService.CreateTaskAsync(request.Title, request.Description);
+        return Ok(createdTask);
     }
 
 }
