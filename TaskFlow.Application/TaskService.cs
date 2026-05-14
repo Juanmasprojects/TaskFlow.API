@@ -33,6 +33,19 @@ namespace TaskFlow.Application
             return await _taskRepository.GetAllAsync();
         }
 
+        public async Task UpdateTaskAsync(Guid taskId, string title, string description, TaskStatus status)
+        {
+            var task = await _taskRepository.GetByIdAsync(taskId);
+
+            if (task == null) return;
+
+            task.Title = title;
+            task.Description = description;
+            task.Status = status;
+
+            await _taskRepository.UpdateAsync(task);
+        }
+
         public async Task UpdateTaskStatusAsync(Guid taskId, TaskStatus status)
         {
             var task = await _taskRepository.GetByIdAsync(taskId);
@@ -58,6 +71,11 @@ namespace TaskFlow.Application
         public async Task DeleteTaskAsync(Guid taskId)
         {
             await _taskRepository.DeleteAsync(taskId);
+        }
+
+        public async Task<TaskItem?> GetTaskByIdAsync(Guid taskId)
+        {
+            return await _taskRepository.GetByIdAsync(taskId);
         }
     }
 }

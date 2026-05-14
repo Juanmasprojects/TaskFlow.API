@@ -32,4 +32,38 @@ public class TasksController : ControllerBase
         return Ok(createdTask);
     }
 
+    // Delete a task by its id and return NoContent if successful.
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask(Guid id)
+    {
+        await _taskService.DeleteTaskAsync(id);
+        return NoContent();
+    }
+
+    // Create an endpoint to get a task by its id.
+    // Return NotFound if the task does not exist.
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetTask(Guid id)
+    {
+        var task = await _taskService.GetTaskByIdAsync(id);
+        if (task == null)
+        {
+            return NotFound();
+        }
+        return Ok(task);
+    }
+
+    // Create a PUT endpoint to update a task by id.
+    // Return NotFound if task does not exist.
+    [HttpPut("{id}")]
+    public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskRequest request)
+    {
+        var task = await _taskService.GetTaskByIdAsync(id);
+        if (task == null)
+        {
+            return NotFound();
+        }
+        await _taskService.UpdateTaskAsync(id, request.Title, request.Description, request.Status);
+        return Ok(task);
+    }
 }
