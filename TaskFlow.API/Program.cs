@@ -21,5 +21,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+// Register global exception handling middleware
+app.UseMiddleware<TaskFlow.API.Middleware.ExceptionHandlingMiddleware>();
 app.MapControllers();
 app.Run();
