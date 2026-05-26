@@ -54,6 +54,22 @@ public class TasksController : ControllerBase
         return Ok(task);
     }
 
+    // Create an endpoint to get a task by shortId
+    [HttpGet("short/{shortId}")]
+    public async Task<IActionResult> GetTaskByShortId(string shortId)
+    {
+        var task = await _taskService.GetTaskByShortIdAsync(shortId);
+        return Ok(task);
+    }
+
+    // Create and endpoint to delete a task by shorId  
+    [HttpDelete("short/{shortId}")]
+    public async Task<IActionResult> DeleteTaskByShortId(string shortId)
+    {
+        await _taskService.DeleteTaskByShortIdAsync(shortId);
+        return NoContent();
+    }
+
     // Create a PUT endpoint to update a task by id.
     // Return NotFound if task does not exist.
     [HttpPut("{id}")]
@@ -67,4 +83,18 @@ public class TasksController : ControllerBase
         await _taskService.UpdateTaskAsync(id, request.Title, request.Description, request.Status);
         return Ok(task);
     }
-}
+    // Create a PUT endpoint to update a task by id.
+    // Return NotFound if task does not exist.
+    [HttpPut("short/{shortId}")]   
+    public async Task<IActionResult> UpdateTaskByShortId(string shortId, [FromBody] UpdateTaskRequest request)
+    {
+        var task = await _taskService.GetTaskByShortIdAsync(shortId);
+        if (task == null)
+        {
+            return NotFound();
+        }
+        await _taskService.UpdateTaskByShortIdAsync(shortId, request.Title, request.Description, request.Status);
+        return Ok(task);
+    } 
+
+ }

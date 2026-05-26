@@ -17,7 +17,11 @@ namespace TaskFlow.Application
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ArgumentException("Title cannot be empty.");
-
+            //check if task with same title already exists
+            var existingTasks = await _taskRepository.GetAllAsync();
+            if (existingTasks.Any(t => t.Title.Trim().ToLower() == title.Trim().ToLower()))
+                throw new InvalidOperationException("A task with the same title already exists.");
+            
             var task = new TaskItem
             {
                 Title = title,
@@ -53,6 +57,14 @@ namespace TaskFlow.Application
             await _taskRepository.UpdateAsync(task);
         }
 
+        //update task,searched by shortID, reuse get task by shortID method
+        public async Task UpdateTaskByShortIdAsync(string shortId, string title, string description, TaskStatus status)
+        {
+            var task = await GetTaskByShortIdAsync(shortId);
+            await UpdateTaskAsync(task.Id, title, description, status);
+        }
+
+
         public async Task UpdateTaskStatusAsync(Guid taskId, TaskStatus status)
         {
             var task = await _taskRepository.GetByIdAsync(taskId);
@@ -77,12 +89,47 @@ namespace TaskFlow.Application
 
         public async Task DeleteTaskAsync(Guid taskId)
         {
+            //check if task exists before deleting, if not throw exception
+            var task = await _taskRepository.GetByIdAsync(taskId);
+            if (task == null)
+                throw new InvalidOperationException("Task does not exist.");
+            //check that task is not donde before deleting, if done throw exception
+            if (task.Status == TaskStatus.Done)
+                throw new InvalidOperationException("Cannot delete a task that is marked as Done.");
+            //delete tas
             await _taskRepository.DeleteAsync(taskId);
         }
+
+        //delete task by shortID, reuse get task by shortID method, if task is done throw exception
+        public async Task DeleteTaskByShortIdAsync(string shortId)
+        {
+            var task = await GetTaskByShortIdAsync(shortId);
+            if (task.Status == TaskStatus.Done)
+                throw new InvalidOperationException("Cannot delete a task that is marked as Done.");
+            await DeleteTaskAsync(task.Id);
+        }
+
 
         public async Task<TaskItem?> GetTaskByIdAsync(Guid taskId)
         {
             return await _taskRepository.GetByIdAsync(taskId);
+        }
+
+        //get task by shortID, 6 characters, trow exception if not found, if multiple tasks with same shortID throw exception
+        public async Task<TaskItem> GetTaskByShortIdAsync(string shortId)
+        {
+            if (string.IsNullOrWhiteSpace(shortId) || shortId.Length < 6)
+                throw new InvalidOperationException("Short ID must be at least 6 characters long.");
+
+            var tasks = await _taskRepository.GetAllAsync();
+            var matchingTasks = tasks.Where(t => t.Id.ToString().StartsWith(shortId, StringComparison.OrdinalIgnoreCase)).ToList();
+
+            if (matchingTasks.Count == 0)
+                throw new InvalidOperationException("No task found with the given short ID.");
+            if (matchingTasks.Count > 1)
+                throw new InvalidOperationException("Multiple tasks found with the same short ID. Please provide a longer ID.");
+
+            return matchingTasks.First();
         }
     }
 }
