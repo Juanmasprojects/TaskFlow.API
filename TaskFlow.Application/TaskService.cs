@@ -28,10 +28,17 @@ namespace TaskFlow.Application
             return task;
         }
 
-        public async Task<List<TaskItem>> GetAllTasksAsync()
+        // Return all tasks or filter by status if provided.
+        public async Task<List<TaskItem>> GetAllTasksAsync(TaskStatus? status = null)
         {
-            return await _taskRepository.GetAllAsync();
-        }
+            var tasks = await _taskRepository.GetAllAsync();
+            if (status.HasValue)
+            {
+                tasks = tasks.Where(t => t.Status == status).ToList();
+            }
+            
+            return tasks;
+        } 
 
         public async Task UpdateTaskAsync(Guid taskId, string title, string description, TaskStatus status)
         {

@@ -5,6 +5,7 @@
 using Microsoft.AspNetCore.Mvc;
 using TaskFlow.Application;
 using TaskFlow.API.DTOs;
+using TaskStatus = TaskFlow.Core.TaskStatus;
 
 
 [ApiController]
@@ -19,9 +20,9 @@ public class TasksController : ControllerBase
     }  
 
     [HttpGet]
-    public async Task<IActionResult> GetAllTasks()
+    public async Task<IActionResult> GetAllTasks([FromQuery] TaskStatus? status)
     {
-        var tasks = await _taskService.GetAllTasksAsync();
+        var tasks = await _taskService.GetAllTasksAsync(status);
         return Ok(tasks);
     }
 
