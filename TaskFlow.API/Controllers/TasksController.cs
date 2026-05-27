@@ -26,22 +26,7 @@ public class TasksController : ControllerBase
         return Ok(tasks);
     }
 
-    [HttpPost]
-    public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
-    {
-        var createdTask = await _taskService.CreateTaskAsync(request.Title, request.Description);
-        return Ok(createdTask);
-    }
-
-    // Delete a task by its id and return NoContent if successful.
-    [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteTask(Guid id)
-    {
-        await _taskService.DeleteTaskAsync(id);
-        return NoContent();
-    }
-
-    // Create an endpoint to get a task by its id.
+     // Create an endpoint to get a task by its id.
     // Return NotFound if the task does not exist.
     [HttpGet("{id}")]
     public async Task<IActionResult> GetTask(Guid id)
@@ -60,6 +45,21 @@ public class TasksController : ControllerBase
     {
         var task = await _taskService.GetTaskByShortIdAsync(shortId);
         return Ok(task);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateTask([FromBody] CreateTaskRequest request)
+    {
+        var createdTask = await _taskService.CreateTaskAsync(request.Title, request.Description);
+        return Ok(createdTask);
+    }
+
+    // Delete a task by its id and return NoContent if successful.
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> DeleteTask(Guid id)
+    {
+        await _taskService.DeleteTaskAsync(id);
+        return NoContent();
     }
 
     // Create and endpoint to delete a task by shorId  
@@ -97,4 +97,10 @@ public class TasksController : ControllerBase
         return Ok(task);
     } 
 
+    // Create endpoint for a search tasks by title or description, return a list of matching tasks.
+    [HttpGet("search")]
+    public async Task<IActionResult> SearchTasks([FromQuery] string search)
+    {        var tasks = await _taskService.SearchTasksAsync(search);
+        return Ok(tasks);
+    }
  }

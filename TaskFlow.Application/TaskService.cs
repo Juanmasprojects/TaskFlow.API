@@ -52,9 +52,11 @@ namespace TaskFlow.Application
 
             task.Title = title;
             task.Description = description;
-            task.Status = status;
+            // Use UpdateTaskStatusAsync for consistent status validation logic
+            await UpdateTaskStatusAsync(taskId, status);
 
             await _taskRepository.UpdateAsync(task);
+            
         }
 
         //update task,searched by shortID, reuse get task by shortID method
@@ -64,7 +66,7 @@ namespace TaskFlow.Application
             await UpdateTaskAsync(task.Id, title, description, status);
         }
 
-
+        // A task with status "Done" cannot be moved back to "To Do"
         public async Task UpdateTaskStatusAsync(Guid taskId, TaskStatus status)
         {
             var task = await _taskRepository.GetByIdAsync(taskId);
@@ -74,6 +76,8 @@ namespace TaskFlow.Application
             switch (status)
             {
                 case TaskStatus.ToDo:
+                    if (task.Status == TaskStatus.Done)
+                        throw new InvalidOperationException("A task marked as Done cannot be moved back to To Do.");
                     task.Status = TaskStatus.ToDo;
                     break;
                 case TaskStatus.InProgress:
@@ -130,6 +134,23 @@ namespace TaskFlow.Application
                 throw new InvalidOperationException("Multiple tasks found with the same short ID. Please provide a longer ID.");
 
             return matchingTasks.First();
+        }
+
+        // Search tasks by title or description, return a list of matching tasks.
+        // Search should be case-insensitive and match any part of the title or description.
+        // t.Description can be null, so we need to check for that before searching in it.
+        // If search string is empty or null, trow exception.
+        // If search string is not found, return empty list.
+        public async Task<List<TaskItem>> SearchTasksAsync(string search)
+        {
+            if (string.IsNullOrWhiteSpace(search))
+                throw new ArgumentException("Search string cannot be empty.");
+
+            var tasks = await _taskRepository.GetAllAsync();
+            return tasks.Where(t =>
+                t.Title.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                (t.Description != null && t.Description.Contains(search, StringComparison.OrdinalIgnoreCase))
+            ).ToList();
         }
     }
 }
