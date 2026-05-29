@@ -16,11 +16,11 @@ namespace TaskFlow.Application
         public async Task<TaskItem> CreateTaskAsync(string title, string description)
         {
             if (string.IsNullOrWhiteSpace(title))
-                throw new ArgumentException("Title cannot be empty.");
+                throw new ValidationException("Title cannot be empty.");
             //check if task with same title already exists
             var existingTasks = await _taskRepository.GetAllAsync();
             if (existingTasks.Any(t => t.Title.Trim().ToLower() == title.Trim().ToLower()))
-                throw new InvalidOperationException("A task with the same title already exists.");
+                throw new DuplicateTaskTitleException(title);
             
             var task = new TaskItem
             {
@@ -77,7 +77,7 @@ namespace TaskFlow.Application
             {
                 case TaskStatus.ToDo:
                     if (task.Status == TaskStatus.Done)
-                        throw new InvalidOperationException("A task marked as Done cannot be moved back to To Do.");
+                        throw new InvalidTaskStateException(task.Status.ToString(), status.ToString());
                     task.Status = TaskStatus.ToDo;
                     break;
                 case TaskStatus.InProgress:
@@ -96,10 +96,10 @@ namespace TaskFlow.Application
             //check if task exists before deleting, if not throw exception
             var task = await _taskRepository.GetByIdAsync(taskId);
             if (task == null)
-                throw new InvalidOperationException("Task does not exist.");
+                throw new TaskNotFoundException(taskId);
             //check that task is not donde before deleting, if done throw exception
             if (task.Status == TaskStatus.Done)
-                throw new InvalidOperationException("Cannot delete a task that is marked as Done.");
+                throw new InvalidTaskStateException(task.Status.ToString());
             //delete tas
             await _taskRepository.DeleteAsync(taskId);
         }
@@ -109,13 +109,17 @@ namespace TaskFlow.Application
         {
             var task = await GetTaskByShortIdAsync(shortId);
             if (task.Status == TaskStatus.Done)
-                throw new InvalidOperationException("Cannot delete a task that is marked as Done.");
+                throw new InvalidTaskStateException(task.Status.ToString());
             await DeleteTaskAsync(task.Id);
         }
 
 
         public async Task<TaskItem?> GetTaskByIdAsync(Guid taskId)
         {
+            //check if task exists before getting, if not throw exception
+            var task = await _taskRepository.GetByIdAsync(taskId);
+            if (task == null)
+                throw new TaskNotFoundException(taskId);
             return await _taskRepository.GetByIdAsync(taskId);
         }
 
@@ -123,15 +127,15 @@ namespace TaskFlow.Application
         public async Task<TaskItem> GetTaskByShortIdAsync(string shortId)
         {
             if (string.IsNullOrWhiteSpace(shortId) || shortId.Length < 6)
-                throw new InvalidOperationException("Short ID must be at least 6 characters long.");
+                throw new ValidationException("Short ID must be at least 6 characters long.");
 
             var tasks = await _taskRepository.GetAllAsync();
             var matchingTasks = tasks.Where(t => t.Id.ToString().StartsWith(shortId, StringComparison.OrdinalIgnoreCase)).ToList();
 
             if (matchingTasks.Count == 0)
-                throw new InvalidOperationException("No task found with the given short ID.");
+                throw new TaskNotFoundException(shortId);
             if (matchingTasks.Count > 1)
-                throw new InvalidOperationException("Multiple tasks found with the same short ID. Please provide a longer ID.");
+                throw new AmbiguousShortIdException(shortId);
 
             return matchingTasks.First();
         }
@@ -144,7 +148,7 @@ namespace TaskFlow.Application
         public async Task<List<TaskItem>> SearchTasksAsync(string search)
         {
             if (string.IsNullOrWhiteSpace(search))
-                throw new ArgumentException("Search string cannot be empty.");
+                throw new ValidationException("Search string cannot be empty.");
 
             var tasks = await _taskRepository.GetAllAsync();
             return tasks.Where(t =>

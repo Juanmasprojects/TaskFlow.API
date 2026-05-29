@@ -32,10 +32,6 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> GetTask(Guid id)
     {
         var task = await _taskService.GetTaskByIdAsync(id);
-        if (task == null)
-        {
-            return NotFound();
-        }
         return Ok(task);
     }
 
@@ -76,10 +72,6 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskRequest request)
     {
         var task = await _taskService.GetTaskByIdAsync(id);
-        if (task == null)
-        {
-            return NotFound();
-        }
         await _taskService.UpdateTaskAsync(id, request.Title, request.Description, request.Status);
         return Ok(task);
     }
@@ -89,10 +81,6 @@ public class TasksController : ControllerBase
     public async Task<IActionResult> UpdateTaskByShortId(string shortId, [FromBody] UpdateTaskRequest request)
     {
         var task = await _taskService.GetTaskByShortIdAsync(shortId);
-        if (task == null)
-        {
-            return NotFound();
-        }
         await _taskService.UpdateTaskByShortIdAsync(shortId, request.Title, request.Description, request.Status);
         return Ok(task);
     } 

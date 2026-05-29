@@ -30,13 +30,32 @@ namespace TaskFlow.API.Middleware
 
         private static Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
-            var response = new { error = exception.Message };
+            var (statusCode, errorCode) = GetErrorResponse(exception);
+            
+            var response = new 
+            { 
+                errorCode = errorCode,
+                message = exception.Message 
+            };
             var payload = JsonSerializer.Serialize(response);
 
             context.Response.ContentType = "application/json";
-            context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
+            context.Response.StatusCode = (int)statusCode;
 
             return context.Response.WriteAsync(payload);
+        }
+
+        private static (HttpStatusCode, string) GetErrorResponse(Exception exception)
+        {
+            return exception switch
+            {
+                ValidationException => (HttpStatusCode.BadRequest, "VALIDATION_ERROR"),
+                DuplicateTaskTitleException => (HttpStatusCode.Conflict, "DUPLICATE_TITLE"),
+                TaskNotFoundException => (HttpStatusCode.NotFound, "TASK_NOT_FOUND"),
+                InvalidTaskStateException => (HttpStatusCode.BadRequest, "INVALID_STATE"),
+                AmbiguousShortIdException => (HttpStatusCode.BadRequest, "AMBIGUOUS_ID"),
+                _ => (HttpStatusCode.InternalServerError, "INTERNAL_SERVER_ERROR")
+            };
         }
     }
 }
