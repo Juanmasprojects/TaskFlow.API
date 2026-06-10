@@ -4,6 +4,20 @@ using TaskFlow.Infrastructure.Persistence;
 using TaskFlow.Application;
 
 var builder = WebApplication.CreateBuilder(args);
+
+//cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactApp",
+        policy =>
+        {
+            policy
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .WithOrigins("http://localhost:5173");
+        });
+});
+
 builder.Services.AddControllers();
 builder.Services.AddDbContext<TaskFlowDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -20,6 +34,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseCors("ReactApp");
 app.UseHttpsRedirection();
 // Register global exception handling middleware
 app.UseMiddleware<TaskFlow.API.Middleware.ExceptionHandlingMiddleware>();
