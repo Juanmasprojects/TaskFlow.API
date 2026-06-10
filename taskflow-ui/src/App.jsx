@@ -6,6 +6,8 @@ function App() {
   const [selectedStatus, setSelectedStatus] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
+  const [error, setError] = useState("")
+  const [searchQuery, setSearchQuery] = useState("")
 
 
 //////////// FUNCTIONS ////////////
@@ -22,15 +24,22 @@ function App() {
     }
   }
 
-async function loadTasks() {
+async function loadTasks(search = "") {
   try {
-    const response = await fetch('http://localhost:5144/api/tasks')
+    let url = 'http://localhost:5144/api/tasks'
+
+    if (search) {
+      url = `http://localhost:5144/api/tasks/search?search=${encodeURIComponent(search)}`
+    }
+
+    const response = await fetch(url)
     const data = await response.json()
 
     setTasks(data)
+    setError("")
   }
   catch (error) {
-    console.error(error)
+    setError(error.message)
   }
 }
 
@@ -48,16 +57,18 @@ async function createTask() {
     })
 
     if (!response.ok) {
-      throw new Error('Failed to create task')
+      const errorData = await response.json()
+      throw new Error(errorData.message)
     }
 
     setTitle("")
     setDescription("")
 
     await loadTasks()
+    setError("")
   }
   catch (error) {
-    console.error(error)
+    setError(error.message)
   }
 }
 
@@ -71,14 +82,49 @@ async function deleteTask(id) {
     )
 
     if (!response.ok) {
-      throw new Error('Failed to delete task')
+      const errorData = await response.json()
+      throw new Error(errorData.message)
+    }
+    await loadTasks()
+    setError("")
+  }
+  catch (error) {
+    setError(error.message)
+  }
+}
+
+async function updateStatus(task, newStatus) {
+  try {
+    const response = await fetch(
+      `http://localhost:5144/api/tasks/${task.id}`,
+      {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: task.title,
+          description: task.description,
+          status: parseInt(newStatus)
+        })
+      }
+    )
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message)
     }
 
     await loadTasks()
+    setError("")
   }
   catch (error) {
-    console.error(error)
+    setError(error.message)
   }
+}
+
+async function searchTasks() {
+  await loadTasks(searchQuery)
 }
 
 useEffect(() => {
@@ -90,10 +136,27 @@ useEffect(() => {
 return (
   <div>
     <h1>TaskFlow</h1>
-    <button onClick={loadTasks}>
-     Refresh Tasks
-    </button>
-    <p>Total tasks: {tasks.length}</p>
+    {error && (
+      <p>{error}</p>
+    )}
+    <input
+  type="text"
+  placeholder="Search tasks..."
+  value={searchQuery}
+  onChange={(e) => setSearchQuery(e.target.value)}
+/>
+<button onClick={searchTasks}>
+  Search
+</button>
+<button
+  onClick={() => {
+    setSearchQuery("")
+    loadTasks()
+  }}
+>
+  Clear
+</button>
+
 
     <select
   value={selectedStatus}
@@ -112,7 +175,11 @@ return (
   type="text"
   placeholder="Title"
   value={title}
-  onChange={(e) => setTitle(e.target.value)}
+  onChange={(e) => {
+    setTitle(e.target.value) 
+    setError("")
+    }
+    }
 />
 
 <br /><br />
@@ -144,6 +211,16 @@ return (
 
         <p>
           <strong>Status:</strong> {getStatusText(task.status)}
+          <br />
+
+        <select
+         value={task.status}
+         onChange={(e) => updateStatus(task, e.target.value)}
+        >
+        <option value="0">Todo</option>
+        <option value="1">In Progress</option>
+        <option value="2">Done</option>
+        </select>
         </p>
 
         <button onClick={() => deleteTask(task.id)}>
