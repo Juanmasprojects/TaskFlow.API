@@ -48,12 +48,13 @@ namespace TaskFlow.Application
         {
             var task = await _taskRepository.GetByIdAsync(taskId);
 
-            if (task == null) return;
+            if (task == null)
+                throw new TaskNotFoundException(taskId);
 
             task.Title = title;
             task.Description = description;
             // Use UpdateTaskStatusAsync for consistent status validation logic
-            await UpdateTaskStatusAsync(taskId, status);
+            UpdateTaskStatusAsync(task, status);
 
             await _taskRepository.UpdateAsync(task);
             
@@ -67,12 +68,8 @@ namespace TaskFlow.Application
         }
 
         // A task with status "Done" cannot be moved back to "To Do"
-        public async Task UpdateTaskStatusAsync(Guid taskId, TaskStatus status)
+        private static void UpdateTaskStatusAsync(TaskItem task, TaskStatus status)
         {
-            var task = await _taskRepository.GetByIdAsync(taskId);
-
-            if (task == null) return;
-
             switch (status)
             {
                 case TaskStatus.ToDo:
@@ -87,8 +84,6 @@ namespace TaskFlow.Application
                     task.MarkDone();
                     break;
             }
-
-            await _taskRepository.UpdateAsync(task);
         }
 
         public async Task DeleteTaskAsync(Guid taskId)
