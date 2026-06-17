@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react'
 import './App.css'
+import TaskCard from './components/TaskCard'
+import CreateTaskForm from './components/CreateTaskForm'
+import SearchBar from './components/SearchBar'
+import TaskList from './components/TaskList'
 
 function App() {
   const [tasks, setTasks] = useState([])
@@ -139,25 +143,13 @@ return (
     {error && (
       <p>{error}</p>
     )}
-    <input
-  type="text"
-  placeholder="Search tasks..."
-  value={searchQuery}
-  onChange={(e) => setSearchQuery(e.target.value)}
-/>
-<button onClick={searchTasks}>
-  Search
-</button>
-<button
-  onClick={() => {
-    setSearchQuery("")
-    loadTasks()
-  }}
->
-  Clear
-</button>
-
-
+    <SearchBar
+     searchQuery={searchQuery}
+     setSearchQuery={setSearchQuery}
+     loadTasks={loadTasks}
+     searchTasks={searchTasks}
+    />
+    <br />
     <select
   value={selectedStatus}
   onChange={(e) => setSelectedStatus(e.target.value)}
@@ -169,66 +161,22 @@ return (
   </select>
 
     <hr />
-    <h2>Create Task</h2>
-
-<input
-  type="text"
-  placeholder="Title"
-  value={title}
-  onChange={(e) => {
-    setTitle(e.target.value) 
-    setError("")
-    }
-    }
-/>
-
-<br /><br />
-
-<input
-  type="text"
-  placeholder="Description"
-  value={description}
-  onChange={(e) => setDescription(e.target.value)}
-/>
-
-<br /><br />
-<button onClick={createTask}>
-  Create Task
-</button>
-<hr />
-    {tasks
-    .filter(task =>
-    selectedStatus === "" ||
-    task.status.toString() === selectedStatus
-    )
-    .map(task => (
-      <div key={task.id}>
-        <h3>{task.title}</h3>
-
-        <p>
-          <strong>Description:</strong> {task.description}
-        </p>
-
-        <p>
-          <strong>Status:</strong> {getStatusText(task.status)}
-          <br />
-
-        <select
-         value={task.status}
-         onChange={(e) => updateStatus(task, e.target.value)}
-        >
-        <option value="0">Todo</option>
-        <option value="1">In Progress</option>
-        <option value="2">Done</option>
-        </select>
-        </p>
-
-        <button onClick={() => deleteTask(task.id)}>
-        Delete
-        </button>
-        <hr />
-      </div>
-    ))}
+    <CreateTaskForm
+      title={title}
+      setTitle={setTitle}
+      description={description}
+      setDescription={setDescription}
+      createTask={createTask}
+      setError={setError}
+    />
+    <hr />
+    <TaskList
+      tasks={tasks}
+      selectedStatus={selectedStatus}
+      updateStatus={updateStatus}
+      deleteTask={deleteTask}
+      getStatusText={getStatusText}
+    />
   </div>
 )
 
