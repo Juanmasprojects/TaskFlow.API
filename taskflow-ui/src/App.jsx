@@ -135,50 +135,82 @@ useEffect(() => {
   loadTasks()
 }, [])
 
-
 //////////// UI ////////////
 return (
-  <div>
-    <h1>TaskFlow</h1>
-    {error && (
-      <p>{error}</p>
-    )}
-    <SearchBar
-     searchQuery={searchQuery}
-     setSearchQuery={setSearchQuery}
-     loadTasks={loadTasks}
-     searchTasks={searchTasks}
-    />
-    <br />
-    <select
-  value={selectedStatus}
-  onChange={(e) => setSelectedStatus(e.target.value)}
-  > 
-  <option value="">All</option>
-  <option value="0">Todo</option>
-  <option value="1">In Progress</option>
-  <option value="2">Done</option>
-  </select>
+  <div className="app">
+    
+    <header className="app-header">
+        <h1>TaskFlow</h1>
+        <p>ASP.NET Core REST API Portfolio Project</p>
+        {error && (
+        <p className="error-message">
+        {error}
+       </p>
+)}
+    </header>
 
-    <hr />
-    <CreateTaskForm
-      title={title}
-      setTitle={setTitle}
-      description={description}
-      setDescription={setDescription}
-      createTask={createTask}
-      setError={setError}
-    />
-    <hr />
-    <TaskList
-      tasks={tasks}
-      selectedStatus={selectedStatus}
-      updateStatus={updateStatus}
-      deleteTask={deleteTask}
-      getStatusText={getStatusText}
-    />
+    <div className="content">
+      <div className="left-panel">
+        {/* Todo lo de la izquierda */}
+
+        <div>
+          <h2>About Project</h2>
+
+          <p>
+          Placeholder
+          </p>
+        </div>
+
+        <div>
+          <h2>Search Task</h2>
+          <SearchBar 
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+            searchTasks={searchTasks}
+            selectedStatus={selectedStatus}
+            setSelectedStatus={setSelectedStatus}
+          />   
+        </div>
+          <h2>Create New Task</h2>
+          <CreateTaskForm
+            title={title}
+            setTitle={setTitle}
+            description={description}
+            setDescription={setDescription}
+            createTask={createTask}
+            setError={setError}
+          />
+        <div>
+
+        </div>
+
+        <div>
+          <h2>Demo Notice</h2>
+
+          <p>
+          Placeholder
+          </p>
+        </div>
+
+      </div>
+
+      <div className="right-panel">
+      {/* Todo lo de la derecha */}
+        <TaskList
+          tasks={tasks}
+          selectedStatus={selectedStatus}
+          updateStatus={updateStatus}
+          deleteTask={deleteTask}
+          getStatusText={getStatusText}
+        />
+
+      </div>
+
+    </div>
+
   </div>
 )
+
 
 }
 

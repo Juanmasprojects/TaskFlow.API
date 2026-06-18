@@ -8,8 +8,6 @@ function CreateTaskForm({
 }) {
   return (
     <>
-      <h2>Create Task</h2>
-
       <input
         type="text"
         placeholder="Title"

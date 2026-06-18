@@ -1,13 +1,78 @@
+/* ---------- GENERAL ---------- */
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  font-family: Arial, sans-serif;
   margin: 0;
-  padding: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  background: #f3f5f7;
+  color: #222;
 }
 
 #root {
-  padding: 2rem;
+  padding: 32px;
 }
 
-h1 {
-  margin-bottom: 0.5rem;
+
+/* ---------- LAYOUT ---------- */
+
+.app{
+    max-width:1600px;
+    margin:auto;
+}
+
+.app-header{
+    text-align:center;
+    margin-bottom:40px;
+}
+
+.left-panel {
+  width: 420px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.right-panel {
+  flex: 1;
+
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.content{
+    display:flex;
+    gap:32px;
+    align-items:flex-start;
+}
+
+
+/* ---------- CARDS ---------- */
+
+.panel-card {
+  background: white;
+
+  border-radius: 10px;
+
+  padding: 20px;
+
+  box-shadow:
+    0 2px 8px rgba(0,0,0,.08);
+}
+
+.panel-card h2{
+    margin-top:0;
+}
+
+
+/* ---------- TITLES ---------- */
+
+h1{
+    margin-top:0;
+    margin-bottom:0;
+    font-size:40px;
 }
