@@ -15,6 +15,11 @@ body {
   padding: 32px;
 }
 
+button {
+  margin-right: 10px;
+  margin-left: 5px;
+}
+
 
 /* ---------- LAYOUT ---------- */
 
@@ -66,6 +71,10 @@ body {
 
 .panel-card h2{
     margin-top:0;
+}
+
+.task-section {
+    margin-bottom: 24px;
 }
 
 

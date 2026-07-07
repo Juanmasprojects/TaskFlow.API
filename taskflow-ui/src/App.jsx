@@ -12,6 +12,7 @@ function App() {
   const [description, setDescription] = useState("")
   const [error, setError] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
+  const [selectedTask, setSelectedTask] = useState(null)
 
 
 //////////// FUNCTIONS ////////////
@@ -202,6 +203,8 @@ return (
           updateStatus={updateStatus}
           deleteTask={deleteTask}
           getStatusText={getStatusText}
+          selectedTask={selectedTask}
+          setSelectedTask={setSelectedTask}
         />
 
       </div>

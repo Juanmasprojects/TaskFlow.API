@@ -1,15 +1,28 @@
 import TaskCard from './TaskCard'
+import TaskDetails from './TaskDetails'
 
 function TaskList({
   tasks,
   selectedStatus,
   updateStatus,
   deleteTask,
-  getStatusText
+  getStatusText,
+  selectedTask,
+  setSelectedTask
 }) {
+  if (selectedTask) {
+    return (
+        <TaskDetails
+          task={selectedTask}
+          setSelectedTask={setSelectedTask}
+          getStatusText={getStatusText}
+        />
+    )
+  }
   return (
     <>
-      {tasks
+    <h2>Task List</h2>
+    {tasks
         .filter(task =>
           selectedStatus === "" ||
           task.status.toString() === selectedStatus
@@ -21,9 +34,11 @@ function TaskList({
             updateStatus={updateStatus}
             deleteTask={deleteTask}
             getStatusText={getStatusText}
+            setSelectedTask={setSelectedTask}
           />
         ))}
     </>
+     
   )
 }
 
