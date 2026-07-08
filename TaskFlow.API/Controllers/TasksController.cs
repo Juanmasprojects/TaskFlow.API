@@ -71,9 +71,9 @@ public class TasksController : ControllerBase
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateTask(Guid id, [FromBody] UpdateTaskRequest request)
     {
-        var task = await _taskService.GetTaskByIdAsync(id);
         await _taskService.UpdateTaskAsync(id, request.Title, request.Description, request.Status);
-        return Ok(task);
+        var updatedTask = await _taskService.GetTaskByIdAsync(id);
+        return Ok(updatedTask);
     }
     // Create a PUT endpoint to update a task by id.
     // Return NotFound if task does not exist.

@@ -4,11 +4,11 @@ import TaskDetails from './TaskDetails'
 function TaskList({
   tasks,
   selectedStatus,
-  updateStatus,
   deleteTask,
   getStatusText,
   selectedTask,
-  setSelectedTask
+  setSelectedTask,
+  updateTask
 }) {
   if (selectedTask) {
     return (
@@ -16,6 +16,8 @@ function TaskList({
           task={selectedTask}
           setSelectedTask={setSelectedTask}
           getStatusText={getStatusText}
+          deleteTask={deleteTask}
+          updateTask={updateTask}
         />
     )
   }
@@ -31,8 +33,6 @@ function TaskList({
           <TaskCard
             key={task.id}
             task={task}
-            updateStatus={updateStatus}
-            deleteTask={deleteTask}
             getStatusText={getStatusText}
             setSelectedTask={setSelectedTask}
           />

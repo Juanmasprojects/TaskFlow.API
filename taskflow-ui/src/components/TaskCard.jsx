@@ -1,4 +1,4 @@
-function TaskCard({ task, updateStatus, deleteTask, getStatusText, setSelectedTask }) {
+function TaskCard({ task, getStatusText, setSelectedTask }) {
 
   const shortId = task.id.slice(0, 8)
 

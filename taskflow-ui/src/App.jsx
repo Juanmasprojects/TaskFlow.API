@@ -98,19 +98,19 @@ async function deleteTask(id) {
   }
 }
 
-async function updateStatus(task, newStatus) {
+async function updateTask(taskToUpdate) {
   try {
     const response = await fetch(
-      `http://localhost:5144/api/tasks/${task.id}`,
+      `http://localhost:5144/api/tasks/${taskToUpdate.taskId}`,
       {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
         },
         body: JSON.stringify({
-          title: task.title,
-          description: task.description,
-          status: parseInt(newStatus)
+          title: taskToUpdate.title,
+          description: taskToUpdate.description,
+          status: parseInt(taskToUpdate.status)
         })
       }
     )
@@ -120,11 +120,16 @@ async function updateStatus(task, newStatus) {
       throw new Error(errorData.message)
     }
 
+    const updatedTask = await response.json()
+
     await loadTasks()
     setError("")
+
+    return updatedTask
   }
   catch (error) {
     setError(error.message)
+    throw error
   }
 }
 
@@ -200,11 +205,11 @@ return (
         <TaskList
           tasks={tasks}
           selectedStatus={selectedStatus}
-          updateStatus={updateStatus}
           deleteTask={deleteTask}
           getStatusText={getStatusText}
           selectedTask={selectedTask}
           setSelectedTask={setSelectedTask}
+          updateTask={updateTask}
         />
 
       </div>
