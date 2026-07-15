@@ -34,6 +34,7 @@ button {
 }
 
 .left-panel {
+  position: relative;
   width: 420px;
 
   display: flex;
@@ -42,6 +43,7 @@ button {
 }
 
 .right-panel {
+  position: relative;
   flex: 1;
 
   display: flex;
@@ -55,6 +57,56 @@ button {
     align-items:flex-start;
 }
 
+.toast {
+    position: fixed;
+
+    bottom: 20px;
+    right: 20px;
+
+    padding: 14px 20px;
+
+    border-radius: 8px;
+
+    color: white;
+
+    font-weight: bold;
+
+    z-index: 1000;
+}
+
+.toast.success {
+    background-color: #2e7d32;
+}
+
+.toast.error {
+    background-color: #c62828;
+}
+
+.confirm-overlay {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.confirm-dialog {
+    width: 380px;
+    background: white;
+    border-radius: 10px;
+    padding: 24px;
+    text-align: center;
+    box-shadow: 0 8px 30px rgba(0,0,0,.25);
+}
+
+.confirm-buttons {
+    margin-top: 25px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
 
 /* ---------- CARDS ---------- */
 

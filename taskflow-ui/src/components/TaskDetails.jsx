@@ -1,12 +1,17 @@
 import { useState } from "react"
 
-function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateTask }) {
+function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateTask, setConfirmDialog }) {
 
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(task.title)
   const [editedDescription, setEditedDescription] = useState(task.description)
   const [editedStatus, setEditedStatus] = useState(task.status)
+  const [isSaving, setIsSaving] = useState(false)
 
+  async function handleDelete() {
+    await deleteTask(task.id)
+    setSelectedTask(null)
+  }
 
   return (
     <div>
@@ -18,6 +23,7 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <h3>
         {isEditing ? (
           <input
+          disabled={isSaving}
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
           />
@@ -29,6 +35,7 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <p>
         {isEditing ? (
           <textarea
+          disabled={isSaving}
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
           />
@@ -36,7 +43,6 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <p>{task.description}</p>
       )}
       </p>
-
       <hr />
       
       <div className="task-section">
@@ -49,6 +55,7 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       {isEditing ? (
       <div>
         <select
+          disabled={isSaving}
           value={editedStatus}
           onChange={(e) => setEditedStatus(Number(e.target.value))}
         >
@@ -70,7 +77,9 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <hr />
       {isEditing ? (
         <div>
-          <button onClick={() => {
+          <button 
+            disabled={isSaving}
+            onClick={() => {
             setIsEditing(false)
             setEditedTitle(task.title)
             setEditedDescription(task.description)
@@ -78,19 +87,32 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
           }}>
           Cancel
           </button>
-
-          <button onClick={async() => {
-            const taskToUpdate = {
-              taskId: task.id,
-              title: editedTitle,
-              description: editedDescription,
-              status: editedStatus
+          <button 
+            disabled={isSaving ||
+              (
+              editedTitle === task.title &&
+              editedDescription === task.description &&
+              editedStatus === task.status
+              )
             }
+            onClick={async() => {
+            setIsSaving(true)
+            try {
+              const taskToUpdate = {
+                taskId: task.id,
+                title: editedTitle,
+                description: editedDescription,
+                status: editedStatus
+              }
             const updatedTask = await updateTask(taskToUpdate)
             setSelectedTask(updatedTask)
             setIsEditing(false)
+            }
+            finally {
+            setIsSaving(false)
+            }
           }}>
-          Save
+          {isSaving ? "Saving..." : "Save"}
           </button>
         </div>
       ) : (
@@ -99,7 +121,16 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
           ← Back to List
           </button>
 
-          <button onClick={() => deleteTask(task.id)}>
+          <button onClick={
+            () => setConfirmDialog({
+            title: "Delete Task",
+            message: "Are you sure you want to delete task \"" + task.title + "\"?",
+            onConfirm: async () => {
+              await deleteTask(task.id)
+              setSelectedTask(null)
+            }
+          })
+          }>
           Delete
           </button>
 

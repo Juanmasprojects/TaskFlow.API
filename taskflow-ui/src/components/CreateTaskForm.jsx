@@ -4,7 +4,7 @@ function CreateTaskForm({
   description,
   setDescription,
   createTask,
-  setError
+  setToast
 }) {
   return (
     <>
@@ -14,7 +14,7 @@ function CreateTaskForm({
         value={title}
         onChange={(e) => {
           setTitle(e.target.value)
-          setError("")
+          setToast(null)
         }}
       />
 

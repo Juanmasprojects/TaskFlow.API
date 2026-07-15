@@ -4,15 +4,20 @@ import TaskCard from './components/TaskCard'
 import CreateTaskForm from './components/CreateTaskForm'
 import SearchBar from './components/SearchBar'
 import TaskList from './components/TaskList'
+import Toast from "./components/Toast"
+import ConfirmDialog from './components/ConfirmDialog'
 
 function App() {
   const [tasks, setTasks] = useState([])
-  const [selectedStatus, setSelectedStatus] = useState("")
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
-  const [error, setError] = useState("")
+  
+  const [selectedStatus, setSelectedStatus] = useState("")
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedTask, setSelectedTask] = useState(null)
+
+  const [toast, setToast] = useState(null)
+  const [confirmDialog, setConfirmDialog] = useState(null)
 
 
 //////////// FUNCTIONS ////////////
@@ -41,10 +46,13 @@ async function loadTasks(search = "") {
     const data = await response.json()
 
     setTasks(data)
-    setError("")
+    setToast(null)
   }
   catch (error) {
-    setError(error.message)
+    setToast({
+      type: "error",
+      message: error.message
+    })
   }
 }
 
@@ -63,6 +71,7 @@ async function createTask() {
 
     if (!response.ok) {
       const errorData = await response.json()
+      console.log(errorData)
       throw new Error(errorData.message)
     }
 
@@ -70,10 +79,16 @@ async function createTask() {
     setDescription("")
 
     await loadTasks()
-    setError("")
+      setToast({
+      type: "success",
+      message: "Task created successfully."
+    })
   }
   catch (error) {
-    setError(error.message)
+    setToast({
+      type: "error",
+      message: error.message
+    })
   }
 }
 
@@ -91,10 +106,16 @@ async function deleteTask(id) {
       throw new Error(errorData.message)
     }
     await loadTasks()
-    setError("")
+    setToast({
+      type: "success",
+      message: "Task deleted successfully."
+    })
   }
   catch (error) {
-    setError(error.message)
+    setToast({
+      type: "error",
+      message: error.message
+    })
   }
 }
 
@@ -123,12 +144,19 @@ async function updateTask(taskToUpdate) {
     const updatedTask = await response.json()
 
     await loadTasks()
-    setError("")
+    setToast({
+      type: "success",
+      message: "Task updated successfully."
+    })
+
 
     return updatedTask
   }
   catch (error) {
-    setError(error.message)
+    setToast({
+      type: "error",
+      message: error.message
+    })
     throw error
   }
 }
@@ -148,11 +176,10 @@ return (
     <header className="app-header">
         <h1>TaskFlow</h1>
         <p>ASP.NET Core REST API Portfolio Project</p>
-        {error && (
-        <p className="error-message">
-        {error}
-       </p>
-)}
+        <Toast
+        toast={toast}
+        setToast={setToast}
+        />
     </header>
 
     <div className="content">
@@ -184,7 +211,7 @@ return (
             description={description}
             setDescription={setDescription}
             createTask={createTask}
-            setError={setError}
+            setToast={setToast}
           />
         <div>
 
@@ -202,6 +229,10 @@ return (
 
       <div className="right-panel">
       {/* Todo lo de la derecha */}
+        <ConfirmDialog
+          confirmDialog={confirmDialog}
+          setConfirmDialog={setConfirmDialog}
+        />
         <TaskList
           tasks={tasks}
           selectedStatus={selectedStatus}
@@ -210,6 +241,7 @@ return (
           selectedTask={selectedTask}
           setSelectedTask={setSelectedTask}
           updateTask={updateTask}
+          setConfirmDialog={setConfirmDialog}
         />
 
       </div>

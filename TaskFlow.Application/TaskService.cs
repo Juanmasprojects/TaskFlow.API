@@ -17,7 +17,13 @@ namespace TaskFlow.Application
         {
             if (string.IsNullOrWhiteSpace(title))
                 throw new ValidationException("Title cannot be empty.");
-            //check if task with same title already exists
+            //check if title is longer than 100 characters
+            if (title.Length > 100)
+                throw new ValidationException("Title cannot be longer than 100 characters.");
+            //check if description is longer than 500 characters
+            if (description.Length > 500)
+                throw new ValidationException("Description cannot be longer than 500 characters.");
+            //check if task with same title already exists        
             var existingTasks = await _taskRepository.GetAllAsync();
             if (existingTasks.Any(t => t.Title.Trim().ToLower() == title.Trim().ToLower()))
                 throw new DuplicateTaskTitleException(title);
