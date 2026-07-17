@@ -1,26 +1,27 @@
-function TaskCard({ task, getStatusText, setSelectedTask }) {
+function TaskCard({ task, getStatusText, setSelectedTask, getStatusClass }) {
 
   const shortId = task.id.slice(0, 8)
 
   return (
-    <div>
+    <div className="task-card">
       <h3>{task.title}</h3>
 
-      <p>{task.description}</p>
+      <p className="task-description">{task.description}</p>
 
-      <p>
-        <strong>Status:</strong> {getStatusText(task.status)}
-      </p>
+      <div className="status">
+        <span
+         className={`status-dot ${getStatusClass(task.status)}`}
+        ></span>
+        <span>{getStatusText(task.status)}</span>
+      </div>
 
-      <p>
+      <p className="short-id">
         <strong>Short ID:</strong> {shortId}
       </p>
 
       <button onClick={() => setSelectedTask(task)}>
       View Details
       </button>
-
-      <hr />
     </div>
   )
 }

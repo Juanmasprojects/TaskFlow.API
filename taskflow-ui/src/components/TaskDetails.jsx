@@ -1,6 +1,6 @@
 import { useState } from "react"
 
-function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateTask, setConfirmDialog }) {
+function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateTask, setConfirmDialog, getStatusClass }) {
 
   const [isEditing, setIsEditing] = useState(false)
   const [editedTitle, setEditedTitle] = useState(task.title)
@@ -14,8 +14,8 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
   }
 
   return (
-    <div>
-
+    <div className="task-details">
+      <div className="task-section">
       <h2>Task Details</h2>
 
       <hr />
@@ -31,7 +31,7 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
         : task.title}
       </h3>
 
-      <p><strong>Description:</strong></p>  
+      <strong>Description</strong> 
       <p>
         {isEditing ? (
           <textarea
@@ -43,15 +43,17 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <p>{task.description}</p>
       )}
       </p>
+      </div>
       <hr />
       
       <div className="task-section">
       <strong>ID</strong>
-      <p>{task.id}</p>
+      <p className="task-id">{task.id}</p>
       </div>
 
       <div className="task-section">
       <strong>Status</strong>
+      <div>
       {isEditing ? (
       <div>
         <select
@@ -59,19 +61,25 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
           value={editedStatus}
           onChange={(e) => setEditedStatus(Number(e.target.value))}
         >
-          <option value={0}>Todo</option>
+          <option value={0}>To Do</option>
           <option value={1}>In Progress</option>
           <option value={2}>Done</option>
         </select>
       </div>
       ) : (
-        <p>{getStatusText(task.status)}</p>
+        <div className="status">
+          <span
+            className={`status-dot ${getStatusClass(task.status)}`}
+           ></span>
+          <span>{getStatusText(task.status)}</span>
+        </div>
       )}
       </div>
+      </div>  
 
       <div className="task-section">
       <strong>Created at</strong>
-      <p>{task.createdAt}</p>
+      <p className="task-date">{task.createdAt}</p>
       </div>
 
       <hr />

@@ -24,13 +24,26 @@ function App() {
    function getStatusText(status) {
     switch (status) {
       case 0:
-        return "Todo"
+        return "To Do"
       case 1:
         return "In Progress"
       case 2:
         return "Done"
       default:
         return "Unknown"
+    }
+  }
+
+  function getStatusClass(status) {
+    switch (status) {
+      case 0:
+        return "status-todo"
+      case 1:
+        return "status-progress"
+      case 2:
+        return "status-done"
+      default:
+        return ""
     }
   }
 
@@ -242,6 +255,7 @@ return (
           setSelectedTask={setSelectedTask}
           updateTask={updateTask}
           setConfirmDialog={setConfirmDialog}
+          getStatusClass={getStatusClass}
         />
 
       </div>

@@ -9,7 +9,8 @@ function TaskList({
   selectedTask,
   setSelectedTask,
   updateTask,
-  setConfirmDialog
+  setConfirmDialog,
+  getStatusClass
 }) {
   if (selectedTask) {
     return (
@@ -20,6 +21,7 @@ function TaskList({
           deleteTask={deleteTask}
           updateTask={updateTask}
           setConfirmDialog={setConfirmDialog}
+          getStatusClass={getStatusClass}
         />
     )
   }
@@ -37,6 +39,7 @@ function TaskList({
             task={task}
             getStatusText={getStatusText}
             setSelectedTask={setSelectedTask}
+            getStatusClass={getStatusClass}
           />
         ))}
     </>
