@@ -23,6 +23,7 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <h3>
         {isEditing ? (
           <input
+          className="title-input"
           disabled={isSaving}
           value={editedTitle}
           onChange={(e) => setEditedTitle(e.target.value)}
@@ -35,12 +36,13 @@ function TaskDetails({ task, setSelectedTask, getStatusText, deleteTask, updateT
       <p>
         {isEditing ? (
           <textarea
+          className="description-input"
           disabled={isSaving}
           value={editedDescription}
           onChange={(e) => setEditedDescription(e.target.value)}
           />
         ) : (
-      <p>{task.description}</p>
+      <p className="description-text">{task.description}</p>
       )}
       </p>
       </div>

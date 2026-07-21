@@ -198,25 +198,29 @@ return (
     <div className="content">
       <div className="left-panel">
         {/* Todo lo de la izquierda */}
-
-        <div>
-          <h2>About Project</h2>
-
+        <div className="about-section">
+          <h2>Project Overview</h2>
           <p>
-          Placeholder
+          TaskFlow demonstrates a complete full-stack workflow, including task creation, editing, filtering, deletion,
+          validation, and error handling through a RESTful API.
           </p>
+          <p>Built with:</p>
+          <p>• ASP.NET Core • React • SQLite</p>
         </div>
-
         <div>
+          <hr />
           <h2>Search Task</h2>
           <SearchBar 
             searchQuery={searchQuery}
             setSearchQuery={setSearchQuery}
+            loadTasks={loadTasks}
             searchTasks={searchTasks}
             selectedStatus={selectedStatus}
             setSelectedStatus={setSelectedStatus}
-          />   
-        </div>
+          />  
+        </div>   
+        <div>
+          <hr /> 
           <h2>Create New Task</h2>
           <CreateTaskForm
             title={title}
@@ -226,15 +230,16 @@ return (
             createTask={createTask}
             setToast={setToast}
           />
-        <div>
-
         </div>
-
-        <div>
-          <h2>Demo Notice</h2>
+        <div className='demo-section'>
+          <hr />
+          <h4>Demo Notice</h4>
 
           <p>
-          Placeholder
+          This application is hosted on a free cloud service for demonstration purposes.
+          The first request may take a few seconds while the server starts.
+          Additionally, task data may occasionally be reset due to free-tier hosting limitations,
+           such as server restarts or redeployments.
           </p>
         </div>
 

@@ -27,7 +27,7 @@ function TaskList({
   }
   return (
     <>
-    <h2>Task List</h2>
+    <h2 className="task-list-title">Task List</h2>
     {tasks
         .filter(task =>
           selectedStatus === "" ||

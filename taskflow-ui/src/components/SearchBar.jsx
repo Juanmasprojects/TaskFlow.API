@@ -1,7 +1,7 @@
 function SearchBar({ searchQuery, setSearchQuery, loadTasks, searchTasks, selectedStatus, setSelectedStatus }) {
     return (
             <>
-            <div>
+            <div className="search-section">
                 <input
                 type="text"
                 placeholder="Search tasks..."
@@ -20,14 +20,14 @@ function SearchBar({ searchQuery, setSearchQuery, loadTasks, searchTasks, select
                 Clear
                 </button>
             </div>
-            <div>
+            <div className="filter-section">
                 <label>Filter by status: </label>
                 <select
                 value={selectedStatus}
                 onChange={(e) => setSelectedStatus(e.target.value)}
                 >
                 <option value="">All</option>    
-                <option value="0">Todo</option>
+                <option value="0">To Do</option>
                 <option value="1">In Progress</option>
                 <option value="2">Done</option>
                 </select>

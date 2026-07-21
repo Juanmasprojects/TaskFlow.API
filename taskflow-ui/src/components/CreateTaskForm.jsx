@@ -7,7 +7,7 @@ function CreateTaskForm({
   setToast
 }) {
   return (
-    <>
+    <div className="create-section">
       <input
         type="text"
         placeholder="Title"
@@ -20,19 +20,17 @@ function CreateTaskForm({
 
       <br /><br />
 
-      <input
+      <textarea
         type="text"
         placeholder="Description"
         value={description}
         onChange={(e) => setDescription(e.target.value)}
       />
 
-      <br /><br />
-
       <button onClick={createTask}>
         Create Task
       </button>
-    </>
+    </div>
   )
 }
 
