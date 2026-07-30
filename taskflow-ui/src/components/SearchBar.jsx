@@ -4,7 +4,7 @@ function SearchBar({ searchQuery, setSearchQuery, loadTasks, searchTasks, select
             <div className="search-section">
                 <input
                 type="text"
-                placeholder="Search tasks..."
+                placeholder="Search by tittle or ID"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 />

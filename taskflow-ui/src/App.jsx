@@ -19,7 +19,6 @@ function App() {
   const [toast, setToast] = useState(null)
   const [confirmDialog, setConfirmDialog] = useState(null)
 
-
 //////////// FUNCTIONS ////////////
    function getStatusText(status) {
     switch (status) {
@@ -175,7 +174,80 @@ async function updateTask(taskToUpdate) {
 }
 
 async function searchTasks() {
-  await loadTasks(searchQuery)
+  const query = searchQuery.trim()
+
+    if (query == "") {
+        await loadTasks()
+        return
+    }
+
+    const guidRegex = /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/
+    const shortIdRegex = /^[0-9a-fA-F]+$/
+
+    if (guidRegex.test(query)) {
+      getTaskbyID(query);  
+    }
+
+    else if (shortIdRegex.test(query)) {
+      getTaksbyShortID(query);
+    }
+    else {
+      await loadTasks(query)
+    }
+}
+
+async function getTaskbyID(id)
+{
+  try {
+
+    const response = await fetch(
+      `http://localhost:5144/api/tasks/${id}`
+    )
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message)
+    }
+
+    const task = await response.json()
+
+    setTasks([task])
+    setToast(null)
+
+  }
+  catch (error) {
+    setToast({
+      type: "error",
+      message: error.message
+    })
+  }
+}
+
+async function getTaksbyShortID(shortId)
+{
+  try {
+
+    const response = await fetch(
+      `http://localhost:5144/api/tasks/short/${shortId}`
+    )
+
+    if (!response.ok) {
+      const errorData = await response.json()
+      throw new Error(errorData.message)
+    }
+
+    const task = await response.json()
+
+    setTasks([task])
+    setToast(null)
+
+  }
+  catch (error) {
+    setToast({
+      type: "error",
+      message: error.message
+    })
+  }
 }
 
 useEffect(() => {
