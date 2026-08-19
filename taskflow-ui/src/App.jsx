@@ -19,6 +19,8 @@ function App() {
   const [toast, setToast] = useState(null)
   const [confirmDialog, setConfirmDialog] = useState(null)
 
+  const API_URL = import.meta.env.VITE_API_URL
+
 //////////// FUNCTIONS ////////////
    function getStatusText(status) {
     switch (status) {
@@ -48,10 +50,10 @@ function App() {
 
 async function loadTasks(search = "") {
   try {
-    let url = 'http://localhost:5144/api/tasks'
+    let url = `${API_URL}/api/tasks`
 
     if (search) {
-      url = `http://localhost:5144/api/tasks/search?search=${encodeURIComponent(search)}`
+      url = `${API_URL}/api/tasks/search?search=${encodeURIComponent(search)}`
     }
 
     const response = await fetch(url)
@@ -70,7 +72,7 @@ async function loadTasks(search = "") {
 
 async function createTask() {
   try {
-    const response = await fetch('http://localhost:5144/api/tasks', {
+    const response = await fetch(`${API_URL}/api/tasks`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -107,7 +109,7 @@ async function createTask() {
 async function deleteTask(id) {
   try {
     const response = await fetch(
-      `http://localhost:5144/api/tasks/${id}`,
+      `${API_URL}/api/tasks/${id}`,
       {
         method: 'DELETE'
       }
@@ -134,7 +136,7 @@ async function deleteTask(id) {
 async function updateTask(taskToUpdate) {
   try {
     const response = await fetch(
-      `http://localhost:5144/api/tasks/${taskToUpdate.taskId}`,
+      `${API_URL}/api/tasks/${taskToUpdate.taskId}`,
       {
         method: 'PUT',
         headers: {
@@ -201,7 +203,7 @@ async function getTaskbyID(id)
   try {
 
     const response = await fetch(
-      `http://localhost:5144/api/tasks/${id}`
+      `${API_URL}/api/tasks/${id}`
     )
 
     if (!response.ok) {
@@ -228,7 +230,7 @@ async function getTaksbyShortID(shortId)
   try {
 
     const response = await fetch(
-      `http://localhost:5144/api/tasks/short/${shortId}`
+      `${API_URL}/api/tasks/short/${shortId}`
     )
 
     if (!response.ok) {
