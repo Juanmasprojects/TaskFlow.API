@@ -18,9 +18,9 @@ The project was created to practice backend development, REST API design, layere
 
 You can try the application online:
 
-**Frontend:** YOUR_FRONTEND_URL
+**Frontend:** https://taskflow-ui-xi.vercel.app/
 
-**API:** YOUR_API_URL
+**API:** https://taskflow-api-jx6o.onrender.com/
 
 > **Demo Notice:** The application is hosted using free-tier services. Because of this, the first request may take longer if the service is inactive, and demo data may be lost after certain server restarts or redeployments.
 
@@ -261,32 +261,31 @@ The goal is to verify not only that the endpoints work, but also that the applic
 ```text
 TaskFlow/
 ├── TaskFlow.API/
+│   ├── DTOs/
 │   ├── Controllers/
 │   ├── Middleware/
 │   └── Program.cs
 │
 ├── TaskFlow.Application/
-│   ├── DTOs/
-│   ├── Exceptions/
-│   ├── Interfaces/
-│   └── Services/
+│   └── Exceptions/
 │
 ├── TaskFlow.Core/
-│   ├── Entities/
-│   └── Enums/
 │
 ├── TaskFlow.Infrastructure/
 │   ├── Persistence/
-│   ├── Repositories/
+│   │	└── TaskFlowDbContext.cs
 │   └── Migrations/
 │
 ├── TaskFlow.Tests/
+│   └── Services/
 │
 ├── taskflow-ui/
-│   └── React / Vite frontend
+│   ├── package.json
+│   └── vite.config.js
 │
 ├── Dockerfile
-└── TaskFlow.API.slnx
+├── TaskFlow.API.slnx
+└── README.md
 ```
 
 ---
