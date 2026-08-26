@@ -6,6 +6,26 @@ The project was created to practice backend development, REST API design, layere
 
 ---
 
+## 🎯 Project Goal
+
+The main goal of this project was to move beyond a simple CRUD application and build a more structured backend system following common development practices.
+
+The project focuses on:
+
+* Clear separation of responsibilities
+* RESTful API design
+* Business rule enforcement
+* Data persistence
+* Consistent error handling
+* Repository and service patterns
+* Automated database migrations
+* Unit testing
+* Deployment using Docker
+
+The React frontend was developed as a client application to demonstrate and interact with the API.
+
+---
+
 ## 🎥 Demo Video
 
 > **[Demo video will be added here]**
@@ -30,41 +50,19 @@ You can try the application online:
 
 ### Main Interface
 
-![TaskFlow main interface](./docs/screenshots/main-interface.png)
+![Main interface](Docs/images/main.png)
 
 ### Task Details
 
-![Task details](./docs/screenshots/task-details.png)
+![Task details](Docs/images/detail.png)
 
 ### Search and Filtering
 
-![Search and filtering](./docs/screenshots/search-and-filter.png)
+![Search and filtering](Docs/images/search.png)
 
 ### Validation and Error Handling
 
-![Validation and error handling](./docs/screenshots/error-handling.png)
-
-<!-- Replace the image paths with the final screenshots -->
-
----
-
-## 🎯 Project Goal
-
-The main goal of this project was to move beyond a simple CRUD application and build a more structured backend system following common development practices.
-
-The project focuses on:
-
-* Clear separation of responsibilities
-* RESTful API design
-* Business rule enforcement
-* Data persistence
-* Consistent error handling
-* Repository and service patterns
-* Automated database migrations
-* Unit testing
-* Deployment using Docker
-
-The React frontend was developed as a client application to demonstrate and interact with the API.
+![Validation and error handling](Docs/images/error.png)
 
 ---
 
