@@ -28,9 +28,7 @@ The React frontend was developed as a client application to demonstrate and inte
 
 ## 🎥 Demo Video
 
-> **[Demo video will be added here]**
-
-<!-- Replace with the YouTube video link -->
+[![Watch the video](https://img.youtube.com/vi/3aw8QP39dU4/0.jpg)](https://www.youtube.com/watch?v=3aw8QP39dU4)
 
 ---
 
